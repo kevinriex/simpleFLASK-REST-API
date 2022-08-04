@@ -45,6 +45,8 @@ def todo():
         ---
         get:
             description: Get List of Todos
+            tags: 
+                - ToDo
             responses:
                 200:
                     description: Return a todo list
@@ -65,12 +67,14 @@ def todo():
 
     return TodoListResponseSchema().dump({"todo_list": dummy}) # Returns the Dummy Object as JSON within the Schema
 
-@app.route("/todo/delete(<id>")
+@app.delete("/todo/delete(<id>")
 def delete_todo(id):
     '''Deleted List of Todo
         ---
         delete:
             description: Get List of Todos
+            tags: 
+                - ToDo
             responses:
                 200:
                     description: Deletes a todo list
@@ -80,12 +84,14 @@ def delete_todo(id):
     '''
     return jsonify({"Status":"OK!"})
 
-@app.route("/todo/put(<id>")
+@app.put("/todo/put(<id>")
 def put_todo(id):
     '''Put a List of Todo
         ---
         put:
             description: Put a List of Todos
+            tags: 
+                - ToDo
             responses:
                 200:
                     description: Deletes a todo list
@@ -95,12 +101,14 @@ def put_todo(id):
     '''
     return jsonify({"Status":"OK!"})
 
-@app.route("/todo/post")
-def post_todo():
+@app.post("/todo/post")
+def post_todo(id):
     '''Posted List of Todo
         ---
         post:
             description: Post a List of Todos
+            tags: 
+                - ToDo
             responses:
                 200:
                     description: Deletes a todo list
@@ -110,11 +118,40 @@ def post_todo():
     '''
     return jsonify({"Status":"OK!"})
 
+@app.route("/dontdo") # Route to GET the TodoList Item
+def dontdo():
+    '''Get List of DontDos
+        ---
+        get:
+            description: Get List of DontDos
+            tags: 
+                - DontDo
+            responses:
+                200:
+                    description: Return a DontDo List
+                    content: 
+                        application/json:
+                            schema: TodoListResponseSchema
+    '''
+    dummy = [{
+        "id": 1,
+        "title": "Finish it",
+        "status": False
+    },
+    {
+        "id": 1,
+        "title": "Finish it",
+        "status": False
+    }]
+
+    return TodoListResponseSchema().dump({"todo_list": dummy}) # Returns the Dummy Object as JSON within the Schema
+
 with app.test_request_context(): # Adding the Todo Route to the swagger.json
     spec.path(view=todo)
     spec.path(view=delete_todo)
     spec.path(view=put_todo)
     spec.path(view=post_todo)
+    spec.path(view=dontdo)
 
 @app.route("/docs") # Route to the Documentation
 @app.route("/docs/<path:path>")
