@@ -1,4 +1,3 @@
-import imp
 from apispec import APISpec
 from apispec_webframeworks.flask import FlaskPlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
@@ -6,10 +5,8 @@ from flask import Flask, jsonify, render_template, send_from_directory
 from jsonify import *
 from marshmallow import Schema, fields
 
-from swagger_ui import api_doc
 
 app = Flask(__name__, template_folder="swagger/templates")
-api_doc(app, config_url="http://localhost:5000/api/docs/swagger.json", url_prefix='/api/docs', title='API Documentation')
 
 
 @app.route("/")
