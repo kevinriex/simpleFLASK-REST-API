@@ -35,6 +35,9 @@ class TodoResposeSchema(Schema):
 class TodoListResponseSchema(Schema):
     todo_list = fields.List(fields.Nested(TodoResposeSchema))
 
+class ShortAwnserSchema(Schema):
+    title = fields.Str()
+    status = fields.Boolean()
 
 @app.route("/todo") # Route to GET the TodoList Item
 def todo():
@@ -62,8 +65,56 @@ def todo():
 
     return TodoListResponseSchema().dump({"todo_list": dummy}) # Returns the Dummy Object as JSON within the Schema
 
+@app.route("/todo/delete(<id>")
+def delete_todo(id):
+    '''Deleted List of Todo
+        ---
+        delete:
+            description: Get List of Todos
+            responses:
+                200:
+                    description: Deletes a todo list
+                    content: 
+                        application/json:
+                            schema: ShortAwnserSchema
+    '''
+    return jsonify({"Status":"OK!"})
+
+@app.route("/todo/put(<id>")
+def put_todo(id):
+    '''Put a List of Todo
+        ---
+        put:
+            description: Put a List of Todos
+            responses:
+                200:
+                    description: Deletes a todo list
+                    content: 
+                        application/json:
+                            schema: ShortAwnserSchema
+    '''
+    return jsonify({"Status":"OK!"})
+
+@app.route("/todo/post")
+def post_todo():
+    '''Posted List of Todo
+        ---
+        post:
+            description: Post a List of Todos
+            responses:
+                200:
+                    description: Deletes a todo list
+                    content: 
+                        application/json:
+                            schema: TodoListResponseSchema
+    '''
+    return jsonify({"Status":"OK!"})
+
 with app.test_request_context(): # Adding the Todo Route to the swagger.json
     spec.path(view=todo)
+    spec.path(view=delete_todo)
+    spec.path(view=put_todo)
+    spec.path(view=post_todo)
 
 @app.route("/docs") # Route to the Documentation
 @app.route("/docs/<path:path>")
@@ -72,6 +123,6 @@ def swagger_docs(path=None):
         return render_template("index.html", base_url="/docs") # Returning the index.html
     else:
         return send_from_directory("./swagger/static", path) # Serving static Content
-        
+
 if __name__ == "__maine__":
     app.run(debug=True) # Running the App in Debug Mode. If this dosen´t work use 'flask --debug run'
